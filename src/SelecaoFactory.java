@@ -39,7 +39,7 @@ public class SelecaoFactory {
 		sf.addSelecacao(selecao2);
 		sf.addSelecacao(selecao3);
 
-		Selecao s = sf.getSelecao(selecao1.getId());
+		Selecao s = sf.getSelecao(4L);
 		System.out.println(s);
 	}
 }

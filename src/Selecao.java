@@ -1,18 +1,16 @@
 import java.io.Serializable;
 
-public class Selecao implements Serializable{
+public class Selecao implements Serializable {
 
 	private Long id;
 	private String nome;
 	private char grupo;
-	
 
 	public Selecao(Long id, String nome, char grupo) {
 		this.id = id;
 		this.nome = nome;
 		this.grupo = grupo;
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -76,9 +74,5 @@ public class Selecao implements Serializable{
 	public void setGrupo(char grupo) {
 		this.grupo = grupo;
 	}
-	
-	
-	
-	
 
 }
