@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Selecao {
+public class Selecao implements Serializable{
 
 	private Long id;
 	private String nome;
