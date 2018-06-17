@@ -1,12 +1,33 @@
+import java.util.Scanner;
 
 public class Copa {
-	public static void main(String[] args) {
 
-		System.out.println("fddfkfkderrefd");
+	private SelecaoFactory factory;
+
+	public Copa() {
+		factory = SelecaoFactory.getInstance();
+	}
+
+	public static void main(String[] args) {
+		Copa copa = new Copa();
+
+		copa.selecionarGrupo();
+
 	}
 
 	public char selecionarGrupo() {
-		return 'F';
+		char gc;
+		String g;
+		do {
+			Scanner s = new Scanner(System.in);
+			System.out.println("Digite o grupo desejado: A|B|C|D|E|F|G|H");
+			g = s.next();
+			gc = g.charAt(0);
+			System.out.println(g.charAt(0));
+		} while (gc != 'A' && gc != 'B' && gc != 'C' && gc != 'D' && gc != 'E' && gc != 'F' && gc != 'G' && gc != 'H' );
+
+		return gc;
+
 	}
 
 	public void cadastrarSelecoes() {

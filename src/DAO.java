@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,52 @@ public class DAO<T> {
 			throw e;		
 		} 
 		return list;
-	}	
+	}
+	
+	/*
+	
+	public Object findOne(Long id) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(new FileInputStream(filename));
+			while (true) {
+				Object o = (o) in.readObject();
+				Class z = o.getClass();
+			
+				Field f = z.getDeclaredField("id");
+				f.setAccessible(true);
+				f.set(o, f);
+				System.out.println(f);
+				
+				System.out.println(f.getLong(f));
+				
+				
+			}
+		} catch (FileNotFoundException e) {
+			throw e;
+		} catch (EOFException e) {
+			in.close();
+		} catch (IOException e) {
+			throw e;
+		} catch (ClassNotFoundException e) {
+			in.close();
+			throw e;		
+		} 
+		return null;
+	}
+	
+	*/
+	
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Selecao s  = new Selecao(1l, "Brazil", 'A');
+		DAO d = new DAO("selecao.dat");
+		d.save(s);
+		
+		List l = d.findAll();
+		System.out.println(l);
+	//	d.findOne(1l);
+		
+	}
 
 }
 

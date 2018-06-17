@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Jogo {
+public class Jogo implements Serializable {
 	
 	private Date data;	
 	private String estadio;
