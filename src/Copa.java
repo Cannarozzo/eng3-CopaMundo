@@ -1,4 +1,7 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Copa {
@@ -12,7 +15,8 @@ public class Copa {
 	public static void main(String[] args) {
 		Copa copa = new Copa();
 
-		copa.cadastrarSelecoes();
+		//copa.cadastrarSelecoes();
+		copa.listarSelecoes();
 
 	}
 
@@ -72,7 +76,20 @@ public class Copa {
 
 	}
 
-	public void listarSelecoes() {
+	public void listarSelecoes(){
+		DAO dao = new DAO<>("selecao.dat");
+		List selecoes = null;
+		try {
+			selecoes = dao.findAll();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(Object selecao : selecoes) {
+			System.out.println(selecao);
+		}
+		
+		//selecoes.stream().forEach( selecao -> System.out.println(selecao));
 
 	}
 
