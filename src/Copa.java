@@ -17,7 +17,8 @@ public class Copa {
 
 		//copa.cadastrarSelecoes();
 		//copa.listarSelecoes();
-		copa.listarSelecoesGrupo('B');
+		//copa.listarSelecoesGrupo('B');
+		copa.listarSelecoesGrupo();
 
 	}
 
@@ -112,7 +113,9 @@ public class Copa {
 	}
 
 	public void listarSelecoesGrupo() {
-
+			char grupoChar = selecionarGrupo();
+			listarSelecoesGrupo(grupoChar);
+		
 	}
 
 	public void cadastrarJogo() {
