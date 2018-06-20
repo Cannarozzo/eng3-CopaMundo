@@ -28,9 +28,7 @@ public class SelecaoFactory {
 	}
 
 	public static void main(String[] args) {
-
 		SelecaoFactory sf = SelecaoFactory.getInstance();
-
 		Selecao selecao1 = new Selecao(1L, "Brasil", 'A');
 		Selecao selecao2 = new Selecao(2L, "Suica", 'A');
 		Selecao selecao3 = new Selecao(1L, "Franca", 'A');
