@@ -14,11 +14,36 @@ public class Copa {
 
 	public static void main(String[] args) {
 		Copa copa = new Copa();
-
-		//copa.cadastrarSelecoes();
-		//copa.listarSelecoes();
-		//copa.listarSelecoesGrupo('B');
-		copa.listarSelecoesGrupo();
+		Scanner s = new Scanner(System.in);
+		int menu = 0;
+		
+		while(menu != 10) {
+			System.out.println("Sistema copa do mundo. Digite 10 para sair");
+			System.out.println("1- Cadastrar seleções");
+			System.out.println("2- Listar todas seleções");
+			System.out.println("3- Listar seleções por grupo");
+			
+			menu = s.nextInt();
+			
+			switch(menu) {
+			case 1:
+				copa.cadastrarSelecoes();
+				break;
+			case 2:
+				copa.listarSelecoes();
+				break;
+			case 3:
+				copa.listarSelecoesGrupo();
+				break;
+			case 10:
+				System.out.println("Programa encerrado");
+				break;
+			default:
+				System.out.println("Opção inválida");
+				break;			
+			}
+			
+		}
 
 	}
 
