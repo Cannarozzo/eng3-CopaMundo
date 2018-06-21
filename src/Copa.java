@@ -3,7 +3,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.xml.crypto.Data;
+import javafx.beans.binding.StringExpression;
 
 public class Copa {
 
@@ -11,6 +11,16 @@ public class Copa {
 
 	public Copa() {
 		factory = SelecaoFactory.getInstance();
+		try { // Restaura o estado da aplicação caso seja interropida.
+			List<Selecao> selecoes = new DAO<Selecao>("selecao.dat").findAll();
+			selecoes.stream().forEach(selecao -> factory.addSelecacao(selecao));
+			selecoes.stream().forEach( s -> System.out.println(s));
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	public static void main(String[] args) {
@@ -158,17 +168,59 @@ public class Copa {
 	}
 
 	public void cadastrarJogo() {
-		char gruopo = selecionarGrupo();
+		char grupo;
+		String dataString,estadioString;
+		Selecao selecaoMandante, selecaoVisitante;
+	
+
+		grupo = selecionarGrupo();
 		Scanner s = new Scanner(System.in);
 		System.out.println("Digite uma data no seguinte formato: dia/mes/ano:");
-		String dataString = s.nextLine();
-		//inverter a data
-		//precisa estar como Ano,mes,dia
-		Date data = new Date(dataString);
-		System.out.println(data);
+		dataString = s.nextLine();
+		// Ideal utilizar a api adequada à datas. Calendar
+		// inverter a data.
+		// precisa estar como Ano,mes,dia
+		Date dataJogo = new Date(dataString);
 		System.out.println("Digite o estádio:");
-		String estadio  = s.next();
-	
+		estadioString = s.next();
+		listarSelecoesGrupo(grupo);
+		
+		//Garantir que o usuário digite um ID de uma selçao já cadastrada.
+		boolean controleIDExiste = true;
+		do {
+			System.out.print("Digite o ID da seleção MANDANTE: ");
+			Long idSelecaoMandante = s.nextLong();
+			selecaoMandante = factory.getSelecao(idSelecaoMandante);
+			if (factory.getSelecao(idSelecaoMandante) != null) {
+				selecaoMandante = factory.getSelecao(idSelecaoMandante);
+				controleIDExiste = false;
+			} else {
+				System.out.print("Digite um ID de uma seleção existente");
+				controleIDExiste = true;
+			}
+		} while (controleIDExiste);
+		
+		//Garantir que o usuário digite um ID válido e que seja diferente da seleção mandante;
+		controleIDExiste = true;
+		do {
+			listarSelecoesGrupo(grupo);
+			System.out.print("Digite o ID da seleção Visiante: ");
+			Long idSelecaoVisitante = s.nextLong();
+			selecaoVisitante = factory.getSelecao(idSelecaoVisitante);
+			System.out.println(idSelecaoVisitante);
+			System.out.println(selecaoMandante.getId());
+			if (selecaoVisitante != null && !idSelecaoVisitante.equals(selecaoMandante.getId()) ) {
+				
+				//selecaoVisitante = factory.getSelecao(idSelecao);
+				controleIDExiste = false;
+			} else {
+				System.out.println("Digite um ID de uma seleção existente e que seja diferente da seleção mandante");
+				controleIDExiste = true;
+			}
+		} while (controleIDExiste);
+		
+		Jogo jogo = new Jogo(null , estadioString, selecaoMandante, selecaoVisitante);
+		System.out.println(jogo);
 	}
 
 	public void listarJogosGrupo() {
