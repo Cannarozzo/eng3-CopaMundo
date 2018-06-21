@@ -3,8 +3,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import javafx.beans.binding.StringExpression;
-
 public class Copa {
 
 	private SelecaoFactory factory;
@@ -14,13 +12,12 @@ public class Copa {
 		try { // Restaura o estado da aplicação caso seja interropida.
 			List<Selecao> selecoes = new DAO<Selecao>("selecao.dat").findAll();
 			selecoes.stream().forEach(selecao -> factory.addSelecacao(selecao));
-			selecoes.stream().forEach( s -> System.out.println(s));
+			selecoes.stream().forEach(s -> System.out.println(s));
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -169,23 +166,34 @@ public class Copa {
 
 	public void cadastrarJogo() {
 		char grupo;
-		String dataString,estadioString;
+		String dataString, estadioString;
 		Selecao selecaoMandante, selecaoVisitante;
-	
 
 		grupo = selecionarGrupo();
 		Scanner s = new Scanner(System.in);
+
+		String[] fixData;
+		StringBuilder dataFixString;
+
 		System.out.println("Digite uma data no seguinte formato: dia/mes/ano:");
 		dataString = s.nextLine();
 		// Ideal utilizar a api adequada à datas. Calendar
 		// inverter a data.
 		// precisa estar como Ano,mes,dia
-		Date dataJogo = new Date(dataString);
+		fixData = dataString.split("/");
+		dataFixString = new StringBuilder();
+		dataFixString.append(fixData[2]);
+		dataFixString.append("/");
+		dataFixString.append(fixData[1]);
+		dataFixString.append("/");
+		dataFixString.append(fixData[0]);
+
+		Date dataJogo = new Date(dataFixString.toString());
 		System.out.println("Digite o estádio:");
 		estadioString = s.next();
 		listarSelecoesGrupo(grupo);
-		
-		//Garantir que o usuário digite um ID de uma selçao já cadastrada.
+
+		// Garantir que o usuário digite um ID de uma selçao já cadastrada.
 		boolean controleIDExiste = true;
 		do {
 			System.out.print("Digite o ID da seleção MANDANTE: ");
@@ -199,19 +207,18 @@ public class Copa {
 				controleIDExiste = true;
 			}
 		} while (controleIDExiste);
-		
-		//Garantir que o usuário digite um ID válido e que seja diferente da seleção mandante;
+
+		// Garantir que o usuário digite um ID válido e que seja diferente da seleção
+		// mandante;
 		controleIDExiste = true;
 		do {
 			listarSelecoesGrupo(grupo);
 			System.out.print("Digite o ID da seleção Visiante: ");
 			Long idSelecaoVisitante = s.nextLong();
 			selecaoVisitante = factory.getSelecao(idSelecaoVisitante);
-			System.out.println(idSelecaoVisitante);
-			System.out.println(selecaoMandante.getId());
-			if (selecaoVisitante != null && !idSelecaoVisitante.equals(selecaoMandante.getId()) ) {
-				
-				//selecaoVisitante = factory.getSelecao(idSelecao);
+			if (selecaoVisitante != null && !idSelecaoVisitante.equals(selecaoMandante.getId())) {
+
+				// selecaoVisitante = factory.getSelecao(idSelecao);
 				controleIDExiste = false;
 			} else {
 				System.out.println("Digite um ID de uma seleção existente e que seja diferente da seleção mandante");
@@ -219,11 +226,32 @@ public class Copa {
 			}
 		} while (controleIDExiste);
 		
-		Jogo jogo = new Jogo(null , estadioString, selecaoMandante, selecaoVisitante);
-		System.out.println(jogo);
+		//Cria objeto do tipo jogo completamente parametrizado pelos dados fornecidos pelo usuário
+		Jogo jogo = new Jogo(dataJogo, estadioString, selecaoMandante, selecaoVisitante);
+		//Instancia uma classe do tipo DAO tipada com a classe jogo para acesso/criação de um arquivo chamada jogo.dat
+		DAO daoJogo = new DAO<Jogo>("jogo.dat");
+		try {
+			daoJogo.save(jogo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Jogo Salvo com sucesso");
 	}
 
 	public void listarJogosGrupo() {
-
+		char grupo = selecionarGrupo();
+		try {
+			System.out.println("Todos os jogos do grupo: " + grupo);
+			List<Jogo> jogos = new DAO<Jogo>("jogo.dat").findAll();
+			jogos.stream()
+				.filter( jogo -> jogo.getMandante().getGrupo() == grupo)
+			    .forEach( jogo -> System.out.println(jogo));
+			System.out.println();
+			
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
