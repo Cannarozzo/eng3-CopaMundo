@@ -46,7 +46,8 @@ public class DAO<T> {
 				list.add((T) in.readObject());
 			}
 		} catch (FileNotFoundException e) {
-			throw e;
+			System.out.println("Não há arquivo selecao.dat criado. Nenhuma seleção cadastrada");
+			//throw e;
 		} catch (EOFException e) {
 			in.close();
 		} catch (IOException e) {
